@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <title>Uprak coyy</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f0f0f0;
+        }
+
+        .footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-item {
+            width: 48%;
+        }
+
+        .footer-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .footer-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TOKO NAJWAN</h1>
+            <h2><img src="image.png" width="200" height="180"> </h2>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="nota">No. Nota:</label>
+            <input class="form-input" type="text" id="nota" placeholder="Masukkan No Nota">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="pelanggan">Pelanggan:</label>
+            <input class="form-input" type="text" id="pelanggan" placeholder="Masukkan Nama">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="tanggal">Tanggal:</label>
+            <input class="form-input" type="text" id="tanggal" placeholder="Masukkan Tanggal">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="kode-barang">Kode Barang:</label>
+            <input class="form-input" type="text" id="kode-barang" placeholder="Masukkan Kode Barang">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="nama-barang">Nama Barang:</label>
+            <input class="form-input" type="text" id="nama-barang" placeholder="Masukkan Nama Barang">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="harga-satuan">Harga Satuan:</label>
+            <input class="form-input" type="number" id="harga-satuan" placeholder="Masukkan Harga Satuan">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="quantity">Quantity:</label>
+            <input class="form-input" type="number" id="quantity" placeholder="Masukkan Quantity">
+        </div>
+
+        <div class="form-group">
+            <button class="button" onclick="tambahBarang()">Tambah Barang</button>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Harga Satuan</th>
+                        <th>Qty</th>
+                        <th>Jumlah</th>
+                        <th>Opsi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-barang">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <div class="footer-item">
+                <label class="footer-label" for="sub-total">Sub Total:</label>
+                <input class="footer-input" type="text" id="sub-total" value="Rp. 0" readonly>
+            </div>
+
+            <div class="footer-item">
+                <label class="footer-label" for="bayar">Bayar:</label>
+                <input class="footer-input" type="number" id="bayar" value="0" oninput="updateTotalHarga()">
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-item">
+                <label class="footer-label" for="diskon">Diskon:</label>
+                <input class="footer-input" type="number" id="diskon" value="0" oninput="updateTotalHarga()">
+                <span>%</span>
+                <input class="footer-input" type="text" id="diskon-rp" value="Rp. 0" readonly>
+            </div>
+
+            <div class="footer-item">
+                <button class="button" onclick="selesai()">Selesai</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-item">
+                <label class="footer-label" for="total-harga">Total Harga:</label>
+                <input class="footer-input" type="text" id="total-harga" value="Rp. 0" readonly>
+            </div>
+
+            <div class="footer-item">
+                <label class="footer-label" for="kembalian">Kembalian:</label>
+                <input class="footer-input" type="text" id="kembalian" value="Rp. 0" readonly>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function setTodayDate() {
+            var today = new Date();
+            var day = String(today.getDate()).padStart(2, '0');
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var year = today.getFullYear();
+
+            today = day + '/' + month + '/' + year;
+            document.getElementById('tanggal').innerText = today;
+        }
+
+        function tambahBarang() {
+            var kodeBarang = document.getElementById('kode-barang').value;
+            var namaBarang = document.getElementById('nama-barang').value;
+            var hargaSatuan = document.getElementById('harga-satuan').value;
+            var quantity = document.getElementById('quantity').value;
+            var jumlah = hargaSatuan * quantity;
+
+            if (kodeBarang && namaBarang && hargaSatuan && quantity) {
+                var table = document.getElementById('tabel-barang');
+                var row = table.insertRow();
+                row.insertCell(0).innerHTML = kodeBarang;
+                row.insertCell(1).innerHTML = namaBarang;
+                row.insertCell(2).innerHTML = hargaSatuan;
+                row.insertCell(3).innerHTML = quantity;
+                row.insertCell(4).innerHTML = jumlah;
+                row.insertCell(5).innerHTML = '<button class="button" onclick="hapusBaris(this)">Hapus</button>';
+
+                updateSubTotal();
+
+                document.getElementById('kode-barang').value = '';
+                document.getElementById('nama-barang').value = '';
+                document.getElementById('harga-satuan').value = '';
+                document.getElementById('quantity').value = 1;
+            } else {
+                alert("Mohon lengkapi semua data barang.");
+            }
+        }
+
+        function hapusBaris(button) {
+            button.parentNode.parentNode.remove();
+            updateSubTotal();
+        }
+
+        function updateSubTotal() {
+            var table = document.getElementById('tabel-barang');
+            var rows = table.rows;
+            var subTotal = 0;
+
+            for (var i = 0; i < rows.length; i++) {
+                subTotal += parseFloat(rows[i].cells[4].innerHTML);
+            }
+
+            document.getElementById('sub-total').value = 'Rp. ' + subTotal.toLocaleString();
+            updateTotalHarga();
+        }
+
+        function updateTotalHarga() {
+            var subTotal = parseFloat(document.getElementById('sub-total').value.replace('Rp. ', '').replace(',', ''));
+            var diskon = parseFloat(document.getElementById('diskon').value);
+            var diskonRp = (diskon / 100) * subTotal;
+            document.getElementById('diskon-rp').value = 'Rp. ' + diskonRp.toLocaleString();
+
+            var totalHarga = subTotal - diskonRp;
+            document.getElementById('total-harga').value = 'Rp. ' + totalHarga.toLocaleString();
+
+            var bayar = parseFloat(document.getElementById('bayar').value);
+            var kembalian = bayar - totalHarga;
+            document.getElementById('kembalian').value = 'Rp. ' + kembalian.toLocaleString();
+        }
+
+        function selesai() {
+            updateTotalHarga();
+            alert("Proses selesai!");
+        }
+    </script>
+</body>
+
+</html>
